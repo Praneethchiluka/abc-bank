@@ -1,6 +1,7 @@
 package com.abc;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Account {
@@ -33,8 +34,17 @@ public void withdraw(double amount) {
     }
 }
 
+public void transfer(Account toAccount,double amount) {
+    if (amount <= 0) {
+        throw new IllegalArgumentException("amount must be greater than zero");
+    } else {
+    	this.withdraw(amount);
+    	toAccount.deposit(amount);
+    }
+}
     public double interestEarned() {
         double amount = sumTransactions();
+        long days=0;
         switch(accountType){
             case SAVINGS:
                 if (amount <= 1000)
@@ -45,11 +55,20 @@ public void withdraw(double amount) {
 //                if (amount <= 4000)
 //                    return 20;
             case MAXI_SAVINGS:
-                if (amount <= 1000)
-                    return amount * 0.02;
-                if (amount <= 2000)
-                    return 20 + (amount-1000) * 0.05;
-                return 70 + (amount-2000) * 0.1;
+ //               if (amount <= 1000)
+ //                   return amount * 0.02;
+ //               if (amount <= 2000)
+//                    return 20 + (amount-1000) * 0.05;
+//                return 70 + (amount-2000) * 0.1;
+            	
+			if (transactions.size() > 0) {
+				days = DateProvider.getInstance()
+						.findDayDiff(transactions.get(transactions.size() - 1).getTransactionDate(), new Date());
+				if (days + 1 > 10) {
+					return amount * 0.05;
+				} else
+					return amount * 0.001;
+			}
             default:
                 return amount * 0.001;
         }

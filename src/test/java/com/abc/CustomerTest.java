@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Date;
+
 public class CustomerTest {
 
     @Test //Test customer statement generation
@@ -14,6 +16,7 @@ public class CustomerTest {
         Account savingsAccount = new Account(Account.SAVINGS);
 
         Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        
 
         checkingAccount.deposit(100.0);
         savingsAccount.deposit(4000.0);
@@ -31,6 +34,36 @@ public class CustomerTest {
                 "Total $3,800.00\n" +
                 "\n" +
                 "Total In All Accounts $3,900.00", henry.getStatement());
+    }
+
+    @Test
+    public void testTransfer(){
+
+        Account checkingAccount = new Account(Account.CHECKING);
+        Account savingsAccount = new Account(Account.SAVINGS);
+
+        Customer henry = new Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount);
+        
+
+        checkingAccount.deposit(100.0);
+        savingsAccount.deposit(4000.0);
+        savingsAccount.transfer(checkingAccount, 400);
+
+        assertEquals("Statement for Henry\n" +
+                "\n" +
+                "Checking Account\n" +
+                "  deposit $100.00\n" +
+                "  deposit $400.00\n" +
+                "Total $500.00\n" +
+                "\n" +
+                "Savings Account\n" +
+                "  deposit $4,000.00\n" +
+                "  withdrawal $400.00\n" +
+                "Total $3,600.00\n" +
+                "\n" +
+                "Total In All Accounts $4,100.00", henry.getStatement());
+ //       System.out.println(henry.getStatement());
+       
     }
 
     @Test
